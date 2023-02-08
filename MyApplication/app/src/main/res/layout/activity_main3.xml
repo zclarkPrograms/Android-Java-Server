@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity3">
+
+    <TextView
+        android:id="@+id/textViewStaticSelectTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transactions"
+        android:textSize="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.115" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStaticSelectTransaction"
+        app:layout_constraintVertical_bias="0.034">
+
+        <!--        <HorizontalScrollView-->
+        <!--            android:id="@+id/hscrll1"-->
+        <!--            android:layout_width="fill_parent"-->
+        <!--            android:layout_height="wrap_content">-->
+
+        <!--            <RelativeLayout-->
+        <!--                android:id="@+id/RelativeLayout1"-->
+        <!--                android:layout_width="fill_parent"-->
+
+        <!--                android:layout_height="fill_parent"-->
+        <!--                android:orientation="vertical">-->
+
+        <TableLayout
+            android:id="@+id/table_main2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1,2"></TableLayout>
+        <!--            </RelativeLayout>-->
+        <!--        </HorizontalScrollView>-->
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
