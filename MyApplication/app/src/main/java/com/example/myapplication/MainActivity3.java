@@ -9,6 +9,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+/**
+ * Lists all transactions
+ */
 public class MainActivity3 extends AppCompatActivity {
 
     @Override
@@ -18,6 +21,9 @@ public class MainActivity3 extends AppCompatActivity {
         displayTable();
     }
 
+    /**
+     * Creates a table of the information for each transaction (Transaction ID, Date, Reward Points, Total Cost).
+     */
     public void displayTable() {
         TableLayout table = (TableLayout) findViewById(R.id.table_main2);
         final String[] labels = new String[]{"TXN Ref", "Date", "Points", "Total"};

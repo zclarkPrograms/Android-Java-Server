@@ -1,9 +1,10 @@
 <%@page import="java.sql.*"%>
 
 <%
+  String path = "";
   DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-  String[] info = GetInfo.getInfo();
-  Connection conn = DriverManager.getConnection(info[0], info[1], info[2]);
+  Connection conn = DriverManager.getConnection("jdbc:sqlite:"+path);
+
   Statement stmt = conn.createStatement();
   String fid = request.getParameter("fid");
   String cid = request.getParameter("cid");

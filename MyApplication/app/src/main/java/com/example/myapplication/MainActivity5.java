@@ -20,22 +20,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Display information of selected prize
+ */
 public class MainActivity5 extends AppCompatActivity {
     private HashMap<String, String> rows;
     TableLayout table;
     private String[][] data_table = new String[25][2];
     private TextView description;
     private TextView pointsNeeded;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main5);
         rows = (HashMap<String, String>)getIntent().getSerializableExtra("data");
-        table = (TableLayout) findViewById(R.id.table_main2);
+        table = findViewById(R.id.table_main2);
         configureText();
         handleSpinner();
     }
 
+    /**
+     * Creates table
+     */
     private void configureText() {
         description = findViewById(R.id.textView5);
         pointsNeeded = findViewById(R.id.textView8);
@@ -51,6 +58,9 @@ public class MainActivity5 extends AppCompatActivity {
         table.addView(tbrow0);
     }
 
+    /**
+     * Creates spinner for selecting prize
+     */
     private void handleSpinner() {
         Spinner spinner = findViewById(R.id.spinner2);
         ArrayList<String> prizeIDs = new ArrayList<>();
@@ -73,7 +83,6 @@ public class MainActivity5 extends AppCompatActivity {
                         String[] inter = data[i].split(",");
                         data_table[i][0] = inter[inter.length - 2];
                         data_table[i][1] = inter[inter.length - 1];
-//                        System.out.println(data[i]);
                     }
 
                     String[] header = data[0].split(",");
@@ -90,6 +99,9 @@ public class MainActivity5 extends AppCompatActivity {
         });
     }
 
+    /**
+     * Loads table with prize information
+     */
     public void loadTable() {
         for (String[] strings : data_table) {
             TableRow tbrow = new TableRow(this);

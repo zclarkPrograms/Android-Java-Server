@@ -5,7 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8e2a1d5-d2a5-48b9-9961-2cf31ce373c9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/MyApplication/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity2.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity3.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity4.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity5.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity5.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity6.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/FamilyIncrease.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/FamilyIncrease.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/GetInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/Info.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/Info.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/PrizeIds.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/PrizeIds.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/RedemptionDetails.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/RedemptionDetails.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/SupportFamilyIncrease.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/SupportFamilyIncrease.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/TransactionDetails.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/TransactionDetails.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyaltyfirst/Transactions.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/Transactions.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/loyaltyfirst/WEB-INF/classes/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/loyaltyfirst/WEB-INF/classes/Login.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -15,6 +29,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2L9QTQAsnWbsLGiy1XkubaIeFZI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -26,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/firem/OneDrive/Desktop/projects/CS450/Android-Java-Server"
+    "last_opened_file_path": "C:/Users/firem/OneDrive/Desktop/programs/Android-Java-Server"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -39,6 +56,17 @@
       <updated>1675280826064</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>

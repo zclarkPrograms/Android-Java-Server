@@ -21,6 +21,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Allows points to be added to family account from a selected transaction.
+ */
 public class MainActivity6 extends AppCompatActivity {
     private HashMap<String, String> map;
     private TextView textViewTXNPoints;
@@ -45,6 +48,9 @@ public class MainActivity6 extends AppCompatActivity {
         textViewFamilyPercent=findViewById(R.id.textViewFamilyPercent);
     }
 
+    /**
+     * Selects the transaction to view.
+     */
     private void configureSpinner(){
         Spinner spinner=findViewById(R.id.spinner3);
         ArrayList<String> trefs=new ArrayList<>();
@@ -76,6 +82,12 @@ public class MainActivity6 extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adds points to all family accounts except the account that is adding these points.
+     * @param npoints number of points to add to all family accounts
+     * @param cid customer id of family member
+     * @param fid family id
+     */
     private void doAddFamilyPoints(String npoints, String cid, String fid){
         try {
             int points = Integer.parseInt(npoints);
@@ -105,6 +117,10 @@ public class MainActivity6 extends AppCompatActivity {
         queue.add(request);
     }
 
+    /**
+     * Creates button to add points to family accounts.
+     * The number of points added to each family member is based on the certain percentage of the customer's point earned from the selected transaction.
+     */
     private void configureButton(){
         Button button=findViewById(R.id.buttonAddFamilyPoints);
         button.setOnClickListener(new View.OnClickListener() {

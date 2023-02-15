@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -19,20 +20,17 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 
+/**
+ * Customer Profile
+ */
 public class MainActivity2 extends AppCompatActivity {
     private TextView NameTextView;
     private TextView PointsTextView;
     private ImageView ProfileImageView;
     private String cid;
 
-    private int numTxnDetDone;
-    private String[] transactionDetails;
-
-    private int numRedDetDone;
-    private String[] redemptionDetails;
-
-    private int numFamilyDetailsDone;
-    private String[] familyDetails;
+    private int numDone;
+    private String[] details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +43,15 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void initializeGlobals(){
-        transactionDetails=new String[1];
-        numTxnDetDone=0;
-        numRedDetDone=0;
-        redemptionDetails=new String[1];
-        familyDetails=new String[1];
-        numFamilyDetailsDone=0;
+        numDone = 0;
+        details = new String[1];
     }
 
+    /**
+     * Displays the profile information of the customer based on the customer's id (customer name, loyalty points, and profile image).
+     * The customer name and points are obtained from an HTTP GET request to a local Apache Tomcat server.
+     * The profile image is selected from the drawable resources, the image whose name corresponds with the customer's id (cid).
+     */
     private void setupProfileInfo(){
         cid = getIntent().getStringExtra("cid");
         RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
@@ -82,47 +81,23 @@ public class MainActivity2 extends AppCompatActivity {
         ProfileImageView = findViewById(R.id.imageViewCustomer);
     }
 
-    private synchronized void setTransactionDone(){
-        numTxnDetDone++;
+    private synchronized void setActionDone(){
+        numDone++;
 
-        if(numTxnDetDone==transactionDetails.length){
+        if(numDone == details.length){
             notify();
         }
     }
 
-    private synchronized void waitUntilTransactionsDone() throws InterruptedException{
-        while(numTxnDetDone<transactionDetails.length){
+    private synchronized void waitUntilActionDone() throws InterruptedException{
+        while(numDone < details.length){
             wait();
         }
     }
 
-    private void collectTransactionData(String[] data){
-        Runnable r = new Runnable() {
-            public void run() {
-                try {
-                    waitUntilTransactionsDone();
-
-                    HashMap<String, String> map = new HashMap<>();
-
-                    for(int i=0;i<transactionDetails.length;i++){
-                        if(transactionDetails[i]!=null){
-                            map.put(data[i], transactionDetails[i]);
-                        }
-                    }
-
-                    Intent intent=new Intent(MainActivity2.this, MainActivity4.class);
-                    intent.putExtra("data", map);
-                    startActivity(intent);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Thread t = new Thread(r);
-        t.start();
-    }
-
+    /**
+     * Obtains information about each transaction this customer made.
+     */
     private void doAllTxn(){
         RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
         String url="http://10.0.2.2:8080/loyaltyfirst/Transactions.jsp?cid=" + cid;
@@ -140,22 +115,43 @@ public class MainActivity2 extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void getTransactionDetails(String tref, int index){
-        RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
-        String url="http://10.0.2.2:8080/loyaltyfirst/TransactionDetails.jsp?tref=" + tref;
+    /**
+     * Waits for data to be collected from the various HTTP requests that were sent,
+     * then brings that data with it to the next activity (MainActivity4).
+     * This avoids the issue of the main thread switching activities before every thread has received a response to the HTTP Request.
+     * @param data data to bring to the next activity
+     */
+    private void collectTransactionData(String[] data){
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    waitUntilActionDone();
 
-        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                transactionDetails[index]=s.trim();
+                    HashMap<String, String> map = new HashMap<>();
 
-                setTransactionDone();
+                    for(int i=0;i<details.length;i++){
+                        if(details[i]!=null){
+                            map.put(data[i], details[i]);
+                        }
+                    }
+
+                    Intent intent=new Intent(MainActivity2.this, MainActivity4.class);
+                    intent.putExtra("data", map);
+                    startActivity(intent);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }, err -> setTransactionDone());
+        };
 
-        queue.add(request);
+        Thread t = new Thread(r);
+        t.start();
     }
 
+    /**
+     * First obtains all transactions that this customer made,
+     * then uses this information to make another request for specific details about these transactions.
+     */
     private void doTxnDet(){
         RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
         String url="http://10.0.2.2:8080/loyaltyfirst/Transactions.jsp?cid=" + cid;
@@ -174,12 +170,13 @@ public class MainActivity2 extends AppCompatActivity {
                 String[] rows = s.trim().split("#");
 
                 String[] data = new String[rows.length];
-                numTxnDetDone=0;
-                transactionDetails = new String[rows.length];
+                numDone=0;
+                details = new String[rows.length];
 
                 for(int i=0;i<data.length;i++){
                     data[i]=rows[i].split(",")[0];
-                    getTransactionDetails(data[i], i);
+                    String url="http://10.0.2.2:8080/loyaltyfirst/TransactionDetails.jsp?tref=" + data[i];
+                    getData(url, i);
                 }
 
                 collectTransactionData(data);
@@ -189,31 +186,17 @@ public class MainActivity2 extends AppCompatActivity {
         queue.add(request);
     }
 
-    private synchronized void setRedemptionDone(){
-        numRedDetDone++;
-
-        if(numRedDetDone==redemptionDetails.length){
-            notify();
-        }
-    }
-
-    private synchronized void waitUntilRedemptionsDone() throws InterruptedException{
-        while(numRedDetDone<redemptionDetails.length){
-            wait();
-        }
-    }
-
     private void collectRedemptionData(String[] data){
         Runnable r = new Runnable() {
             public void run() {
                 try {
-                    waitUntilRedemptionsDone();
+                    waitUntilActionDone();
 
                     HashMap<String, String> map = new HashMap<>();
 
-                    for(int i=0;i<redemptionDetails.length;i++){
-                        if(redemptionDetails[i]!=null){
-                            map.put(data[i], redemptionDetails[i]);
+                    for(int i=0;i<details.length;i++){
+                        if(details[i]!=null){
+                            map.put(data[i], details[i]);
                         }
                     }
 
@@ -230,22 +213,9 @@ public class MainActivity2 extends AppCompatActivity {
         t.start();
     }
 
-    private void getRedemptionDetails(String prizeid, String cid, int index){
-        RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
-        String url="http://10.0.2.2:8080/loyaltyfirst/RedemptionDetails.jsp?prizeid=" + prizeid + "&cid="+cid;
-
-        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                redemptionDetails[index]=s.trim();
-
-                setRedemptionDone();
-            }
-        }, err -> setRedemptionDone());
-
-        queue.add(request);
-    }
-
+    /**
+     * Obtains prize redemption details then switches to the next activity (MainActivity5)
+     */
     private void doRedDet(){
         RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
         String url="http://10.0.2.2:8080/loyaltyfirst/PrizeIds.jsp?cid=" + cid;
@@ -264,12 +234,13 @@ public class MainActivity2 extends AppCompatActivity {
                 String[] prizeids = s.trim().split("#");
 
                 String[] data = new String[prizeids.length];
-                numRedDetDone = 0;
-                redemptionDetails = new String[prizeids.length];
+                numDone = 0;
+                details = new String[prizeids.length];
 
                 for(int i=0;i<data.length;i++){
                     data[i]=prizeids[i];
-                    getRedemptionDetails(data[i], cid, i);
+                    String url="http://10.0.2.2:8080/loyaltyfirst/RedemptionDetails.jsp?prizeid=" + data[i] + "&cid="+cid;
+                    getData(url, i);
                 }
 
                 collectRedemptionData(data);
@@ -279,47 +250,21 @@ public class MainActivity2 extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void getFamilyData(String tref, String cid, int index){
-        RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
-        String url="http://10.0.2.2:8080/loyaltyfirst/SupportFamilyIncrease.jsp?cid=" + cid + "&tref=" + tref;
-
-        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                familyDetails[index]=s.trim();
-
-                setFamilyDone();
-            }
-        }, err->setFamilyDone());
-
-        queue.add(request);
-    }
-
-    private synchronized void setFamilyDone(){
-        numFamilyDetailsDone++;
-
-        if(numFamilyDetailsDone==familyDetails.length){
-            notify();
-        }
-    }
-
-    private synchronized void waitUntilFamilyDetailsDone() throws InterruptedException{
-        while(numFamilyDetailsDone<familyDetails.length){
-            wait();
-        }
-    }
-
+    /**
+     * Waits for all HTTP requests to finish before sending that data to the next activity and switches to the activity.
+     * @param data the data to send to the next activity
+     */
     private void collectFamilyData(String[] data){
         Runnable r = new Runnable() {
             public void run() {
                 try {
-                    waitUntilFamilyDetailsDone();
+                    waitUntilActionDone();
 
                     HashMap<String, String> map = new HashMap<>();
 
-                    for(int i=0;i<familyDetails.length;i++){
-                        if(familyDetails[i]!=null){
-                            map.put(data[i], familyDetails[i]);
+                    for(int i=0;i<details.length;i++){
+                        if(details[i]!=null){
+                            map.put(data[i], details[i]);
                         }
                     }
 
@@ -337,6 +282,10 @@ public class MainActivity2 extends AppCompatActivity {
         t.start();
     }
 
+    /**
+     * Retrieves the necessary data for adding points to family accounts, then
+     * switches to the relevant activity (MainActivity6).
+     */
     private void doFamPer(){
         RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
         String url="http://10.0.2.2:8080/loyaltyfirst/Transactions.jsp?cid=" + cid;
@@ -358,11 +307,12 @@ public class MainActivity2 extends AppCompatActivity {
                     rows[i]=rows[i].split(",")[0];
                 }
 
-                numFamilyDetailsDone=0;
-                familyDetails = new String[rows.length];
+                numDone=0;
+                details = new String[rows.length];
 
-                for(int i=0;i<familyDetails.length;i++){
-                    getFamilyData(rows[i], cid, i);
+                for(int i=0;i<details.length;i++){
+                    String url="http://10.0.2.2:8080/loyaltyfirst/SupportFamilyIncrease.jsp?cid=" + cid + "&tref=" + rows[i];
+                    getData(url, i);
                 }
 
                 collectFamilyData(rows);
@@ -372,46 +322,61 @@ public class MainActivity2 extends AppCompatActivity {
         queue.add(request);
     }
 
+    /**
+     * Sends an HTTP request to the Apache Server to obtain customer data and places the response data into an array.
+     * @param url HTTP GET request
+     * @param index index of the details array to fill with data
+     */
+    private void getData(String url, int index){
+        RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
+
+        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                details[index]=s.trim();
+
+                setActionDone();
+            }
+        }, err -> setActionDone());
+
+        queue.add(request);
+    }
+
+    /**
+     * Runs the provided runnable.
+     * This is useful for preventing the ActionListener for other buttons from being activated before another button switches the intent.
+     * @param runnable the method to run
+     */
+    private synchronized void executeTask(Runnable runnable){
+        numDone = 0;
+        runnable.run();
+    }
+
+    /**
+     * Configures all the buttons that this activity uses:
+     * <b>ALLTxnButton</b> (displays basic information of each of customer's transactions)<br>
+     * <b>TxnDetButton</b> (displays of information for a given transaction)<br>
+     * <b>RedDetButton</b> (displays details of a selected prize redemption)<br>
+     * <b>FamPerButton</b> (allows the user to add points to family accounts)<br>
+     * <b>ExitPerButton</b> (exits the application)
+     */
     private void configureButtons() {
         Button AllTxnButton = findViewById(R.id.buttonAllTransactions);
-        AllTxnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doAllTxn();
-            }
-        });
+        AllTxnButton.setOnClickListener(view -> executeTask(() -> doAllTxn()));
 
         Button TxnDetButton = findViewById(R.id.buttonTransactionDetails);
-        TxnDetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doTxnDet();
-            }
-        });
+        TxnDetButton.setOnClickListener(view -> executeTask(() -> doTxnDet()));
 
         Button RedDetButton = findViewById(R.id.buttonRedemptionDetails);
-        RedDetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doRedDet();
-            }
-        });
+        RedDetButton.setOnClickListener(view -> executeTask(() -> doRedDet()));
 
         Button FamPerButton = findViewById(R.id.buttonFamily);
-        FamPerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doFamPer();
-            }
-        });
+        FamPerButton.setOnClickListener(view -> executeTask(() -> doFamPer()));
 
         Button ExitPerButton = findViewById(R.id.buttonExit);
-        ExitPerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveTaskToBack(true);
-                System.exit(0);
-            }
+        ExitPerButton.setOnClickListener(view -> {
+            moveTaskToBack(true);
+            System.exit(0);
         });
     }
 }

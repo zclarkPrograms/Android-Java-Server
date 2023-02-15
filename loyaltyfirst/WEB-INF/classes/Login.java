@@ -8,14 +8,13 @@ import java.sql.DriverManager;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
-
+    private final String PATH_TO_DATABASE_FILE = "";
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         String[] info = GetInfo.getInfo();
 
         try {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-            
-            Connection conn = DriverManager.getConnection(info[0], info[1], info[2]);
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:"+PATH_TO_DATABASE_FILE);
             
             Statement stmt = conn.createStatement();
             String uname = request.getParameter("user");

@@ -1,9 +1,10 @@
 <%@page import="java.sql.*"%>
 
 <%
+  String path = "";
   DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-  String[] info = GetInfo.getInfo();
-  Connection conn = DriverManager.getConnection(info[0], info[1], info[2]);
+  Connection conn = DriverManager.getConnection("jdbc:sqlite:"+path);
+
   Statement stmt = conn.createStatement();
   String cid = request.getParameter("cid");
 
@@ -14,9 +15,13 @@
 
   String output = "";
   while (rs.next()) {
-    output += rs.getObject(1) + "," + rs.getDate(2) + "," + rs.getObject(3) + "," + rs.getObject(4) + "#";
+    String rowStr="";
+
+    for(int i=1;i<=cols;i++){
+        rowStr+=rs.getObject(i) + ",";
+    }
+    output += rowStr.replaceAll(",$", "") + "#";
   }
-  
   conn.close();
   out.print(output);
 %>

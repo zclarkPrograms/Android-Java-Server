@@ -17,11 +17,13 @@ import java.util.HashMap;
 
 import java.util.ArrayList;
 
+/**
+ * Displays information of specific transaction
+ */
 public class MainActivity4 extends AppCompatActivity {
     private HashMap<String, String> map;
     private TextView textViewDate;
     private TextView textViewPoints;
-    private HashMap<String, String> rows;
     TableLayout table;
     private String[][] data_table = new String[25][3];
 
@@ -30,13 +32,15 @@ public class MainActivity4 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main4);
         map = (HashMap<String, String>)getIntent().getSerializableExtra("data");
-//        rows = (HashMap<String, String>)getIntent().getSerializableExtra("data");
-        table = (TableLayout) findViewById(R.id.table_main);
+        table = findViewById(R.id.table_main);
         configureTextViews();
         configureSpinner();
     }
-    
-     private void configureSpinner(){
+
+    /**
+     * Creates spinner that allows user view information on a specific transaction
+     */
+    private void configureSpinner(){
         Spinner spinner=findViewById(R.id.spinner);
         ArrayList<String> trefs = new ArrayList<>();
         for(String tref : map.keySet()){
@@ -44,7 +48,7 @@ public class MainActivity4 extends AppCompatActivity {
             System.out.println(tref);
         }
 
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, trefs);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, trefs);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -53,13 +57,12 @@ public class MainActivity4 extends AppCompatActivity {
                 configureTextViews();
                 String tref=parent.getSelectedItem().toString();
                 String[] data = map.get(tref).split("#");
-//                System.out.println("Tref " + tref);
+
                 if (data.length >= 1) {
                     for(int i=0;i<data.length;i++){
-
                         data[i]=data[i].trim();
                         String[] inter = data[i].split(",");
-//                        System.out.println("Data: " + data[i]);
+
                         data_table[i][0] = inter[inter.length - 3];
                         data_table[i][1] = inter[inter.length - 2];
                         data_table[i][2] = inter[inter.length - 1];
@@ -78,8 +81,11 @@ public class MainActivity4 extends AppCompatActivity {
             }
         });
     }
-    
-     private void configureTextViews(){
+
+    /**
+     * Create table
+     */
+    private void configureTextViews(){
         textViewPoints=findViewById(R.id.textView9);
         textViewDate=findViewById(R.id.textView6);
         final String[] labels = new String[]{"Prod. Name", "Quantity", "Points"};
@@ -93,9 +99,12 @@ public class MainActivity4 extends AppCompatActivity {
         }
         table.addView(tbrow0);
     }
-    
+
+    /**
+     * Fill table with transaction information
+     */
     public void displayTable() {
-       for (String[] strings : data_table) {
+        for (String[] strings : data_table) {
             TableRow tbrow = new TableRow(this);
             tbrow.setPadding(0, 10, 0, 0);
 

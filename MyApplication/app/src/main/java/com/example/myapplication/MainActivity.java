@@ -15,6 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+/**
+ * Login
+ */
 public class MainActivity extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
 
@@ -26,11 +29,18 @@ public class MainActivity extends AppCompatActivity {
         configureNextButton();
     }
 
+    /**
+     * Creates the username and password text fields
+     */
     private void configureTextFields(){
         editTextUsername=findViewById(R.id.editTextUsername);
         editTextPassword=findViewById(R.id.editTextPassword);
     }
 
+    /**
+     * Creates the next button.
+     * The next button checks the user credentials, via the {@link #login login} method, method upon being clicked,.
+     */
     private void configureNextButton(){
         Button loginButton  = findViewById(R.id.B_Login);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Attempts to log in user into LoyaltyFirst account by sending an HTTP request to the user's local server.
+     * This server (through the 'login' servlet) sends an SQL query to the customer database to verify the user's credentials.
+     * This application uses Android volley to parse this response from the server.
+     * If credentials are valid, the application switches to the activity that displays the user's profile.
+     * Otherwise, the application alerts the user that the credentials are invalid.
+     * @param username the username of the account
+     * @param password the password of the account
+     */
     private void login(String username, String password){
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         String url="http://10.0.2.2:8080/loyaltyfirst/login?user="+username+"&pass="+password;
